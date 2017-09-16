@@ -1,6 +1,15 @@
-language: cpp
+# Note, "language: ruby" and "rvm: system" are a workaround for a segfault when
+# executing brew audit.
+language: ruby
 os: osx
+osx_image: xcode8.1
+rvm: system
+cache:
+  directories:
+    - $HOME/.ccache
 env:
+  global:
+    - CCACHE_COMPRESS=1
   matrix:
     - FORMULA_VERSION=
 before_install:
@@ -8,6 +17,8 @@ before_install:
   - brew --env
   - brew config
 install:
+  - brew install ccache
+  - export PATH="/usr/local/opt/ccache/libexec:$PATH"
   - mkdir -p $(brew --repo)/Library/Taps/CVC4
   - ln -s $TRAVIS_BUILD_DIR $(brew --repo)/Library/Taps/CVC4/homebrew-cvc4
   - brew tap --repair
