@@ -1,9 +1,6 @@
-# Note, "language: ruby" and "rvm: system" are a workaround for a segfault when
-# executing brew audit.
-language: ruby
+language: cpp
 os: osx
 osx_image: xcode8.1
-rvm: system
 cache:
   directories:
     - $HOME/.ccache
@@ -24,6 +21,5 @@ install:
   - brew tap --repair
 script:
   - brew install cvc4 $FORMULA_VERSION --verbose
-  - brew audit cvc4 --strict
   - brew test cvc4
   - cvc4 --version
