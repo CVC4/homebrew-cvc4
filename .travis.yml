@@ -8,9 +8,9 @@ before_install:
   - brew --env
   - brew config
 install:
-  - brew tap CVC4/homebrew-cvc4
   - mkdir -p $(brew --repo)/Library/Taps/CVC4
   - ln -s $TRAVIS_BUILD_DIR $(brew --repo)/Library/Taps/CVC4/homebrew-cvc4
+  - brew tap --repair
 script:
   - brew install cvc4 $FORMULA_VERSION --verbose
   - brew audit cvc4 --strict
