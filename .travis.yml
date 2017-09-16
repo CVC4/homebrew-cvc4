@@ -4,11 +4,11 @@ env:
   matrix:
     - FORMULA_VERSION=
 before_install:
-  - brew update
   - brew --env
   - brew config
 install:
   - brew tap CVC4/homebrew-cvc4
+  - brew update
 script:
   - brew install cvc4 $FORMULA_VERSION --verbose
   - brew audit cvc4 --strict
