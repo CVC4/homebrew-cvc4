@@ -4,11 +4,13 @@ env:
   matrix:
     - FORMULA_VERSION=
 before_install:
+  - brew update
   - brew --env
   - brew config
 install:
   - brew tap CVC4/homebrew-cvc4
-  - brew update
+  - mkdir -p $(brew --repo)/Library/Taps/CVC4
+  - ln -s $TRAVIS_BUILD_DIR $(brew --repo)/Library/Taps/CVC4/homebrew-cvc4
 script:
   - brew install cvc4 $FORMULA_VERSION --verbose
   - brew audit cvc4 --strict
