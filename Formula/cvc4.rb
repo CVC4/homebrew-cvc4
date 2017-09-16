@@ -7,7 +7,7 @@ class Cvc4 < Formula
   depends_on "boost" => :build
   depends_on "gmp"
   depends_on "libantlr3c"
-  depends_on "antlr3"
+  depends_on "antlr@3"
   depends_on :arch => :x86_64
 
   def install
