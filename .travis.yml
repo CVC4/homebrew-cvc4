@@ -1,0 +1,25 @@
+language: cpp
+os: osx
+osx_image: xcode8.1
+cache:
+  directories:
+    - $HOME/.ccache
+env:
+  global:
+    - CCACHE_COMPRESS=1
+  matrix:
+    - FORMULA_VERSION=
+before_install:
+  - brew update
+  - brew --env
+  - brew config
+install:
+  - brew install ccache
+  - export PATH="/usr/local/opt/ccache/libexec:$PATH"
+  - mkdir -p $(brew --repo)/Library/Taps/CVC4
+  - ln -s $TRAVIS_BUILD_DIR $(brew --repo)/Library/Taps/CVC4/homebrew-cvc4
+  - brew tap --repair
+script:
+  - brew install cvc4 $FORMULA_VERSION --verbose
+  - brew test cvc4
+  - cvc4 --version
