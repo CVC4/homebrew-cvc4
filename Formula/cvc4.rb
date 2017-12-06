@@ -2,7 +2,7 @@ class Cvc4 < Formula
   desc "Open-source automatic theorem prover for SMT"
   homepage "https://cvc4.cs.stanford.edu/"
   url "https://cvc4.cs.stanford.edu/downloads/builds/src/cvc4-1.5.tar.gz"
-  sha256 "11ee2c3c182556a5ef750da9631191b3ad6c4ea592eb81d067a2edc41e57bd7b"
+  sha256 "5d6b4f8ee8420f85e3f804181341cedf6ea32342c48f355a5be87754152b14e9"
 
   depends_on "boost" => :build
   depends_on "gmp"
