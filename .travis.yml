@@ -1,25 +1,43 @@
-language: cpp
+language: ruby
 os: osx
-osx_image: xcode8.1
+env: OSX=10.12
+osx_image: xcode8.3
+rvm: system
 cache:
   directories:
-    - $HOME/.ccache
+    - $HOME/.gem/ruby
+    - Library/Homebrew/vendor/bundle
+
 env:
-  global:
-    - CCACHE_COMPRESS=1
   matrix:
     - FORMULA_VERSION=
+    - FORMULA_VERSION=--devel
+
 before_install:
-  - brew update
-  - brew --env
-  - brew config
-install:
-  - brew install ccache
-  - export PATH="/usr/local/opt/ccache/libexec:$PATH"
-  - mkdir -p $(brew --repo)/Library/Taps/CVC4
-  - ln -s $TRAVIS_BUILD_DIR $(brew --repo)/Library/Taps/CVC4/homebrew-cvc4
-  - brew tap --repair
+  - export TRAVIS_COMMIT="$(git rev-parse --verify -q HEAD)"
+  - if [ -f ".git/shallow" ]; then
+      travis_retry git fetch --unshallow;
+    fi
+  - HOMEBREW_REPOSITORY="$(brew --repo)"
+  - sudo chown -R "$USER" "$HOMEBREW_REPOSITORY"
+  - git -C "$HOMEBREW_REPOSITORY" checkout master -f
+  - git -C "$HOMEBREW_REPOSITORY" reset --hard origin/master
+  - brew update || brew update
+  - HOMEBREW_TAP_DIR="$(brew --repo "$TRAVIS_REPO_SLUG")"
+  - mkdir -p "$HOMEBREW_TAP_DIR"
+  - rm -rf "$HOMEBREW_TAP_DIR"
+  - ln -s "$PWD" "$HOMEBREW_TAP_DIR"
+  - export HOMEBREW_DEVELOPER="1"
+  - ulimit -n 1024
+
 script:
-  - brew install cvc4 $FORMULA_VERSION --verbose
+  - brew doctor
+  - brew config
+  - brew install $FORMULA_VERSION cvc4/cvc4/cvc4 --verbose
   - brew test cvc4
   - cvc4 --version
+
+notifications:
+  email:
+    on_success: never
+    on_failure: always
