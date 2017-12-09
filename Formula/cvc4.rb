@@ -22,6 +22,10 @@ class Cvc4 < Formula
     system "make", "install"
   end
 
+  devel do
+    url "https://cvc4.cs.stanford.edu/downloads/builds/src/unstable/latest-unstable.tar.gz"
+  end
+
   test do
     (testpath/"simple.cvc").write <<-EOS.undent
       x0, x1, x2, x3 : BOOLEAN;
