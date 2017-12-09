@@ -29,16 +29,11 @@ before_install:
   - ln -s "$PWD" "$HOMEBREW_TAP_DIR"
   - export HOMEBREW_DEVELOPER="1"
   - ulimit -n 1024
-  - git -C "$HOMEBREW_REPOSITORY" checkout master -f
-  - git -C "$HOMEBREW_REPOSITORY" reset --hard origin/master
-  - git -C "$HOMEBREW_TAP_DIR" merge-base ${TRAVIS_COMMIT_RANGE//.../ }
 
 script:
   - brew doctor
   - brew config
-  - brew readall --aliases cvc4/cvc4
-  - brew fetch --retry cvc4/cvc4/cvc4 --build-bottle --force
-  - brew install $FORMULA_VERSION cvc4/cvc4/cvc4 --verbose --build-bottle
+  - brew install $FORMULA_VERSION cvc4/cvc4/cvc4 --verbose
   - brew test cvc4
   - cvc4 --version
 
