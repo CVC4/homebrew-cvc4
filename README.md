@@ -29,5 +29,5 @@ classpath and set `java.library.path` to the location of `libcvc4jni` (should
 be `/usr/local/lib/jni` if CVC4 was installed with homebrew):
 
 ```
-java -cp /usr/local/share/java/CVC4.jar:<path_to_class_file> -Djava.library.path=/usr/local/lib/jni <class_to_run>
+$ java -cp /usr/local/share/java/CVC4.jar:<path_to_class_file> -Djava.library.path=/usr/local/lib/jni <class_to_run>
 ```
