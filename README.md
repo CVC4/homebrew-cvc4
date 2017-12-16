@@ -5,7 +5,7 @@ CVC4 using this tap, use the following commands:
 
 ```
 $ brew tap cvc4/cvc4
-$ brew tap [--devel] install cvc4/cvc4/cvc4 [--with-java-bindings]
+$ brew [--devel] install cvc4/cvc4/cvc4 [--with-java-bindings]
 ```
 
 The CVC4 formula supports the following optional arguments:
