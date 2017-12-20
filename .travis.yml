@@ -30,6 +30,7 @@ before_install:
   - ln -s "$PWD" "$HOMEBREW_TAP_DIR"
   - export HOMEBREW_DEVELOPER="1"
   - ulimit -n 1024
+  - brew install libidn2
 
 script:
   - brew doctor
@@ -37,9 +38,6 @@ script:
   - brew install $FORMULA_VERSION cvc4/cvc4/cvc4 $OPTS --verbose
   - brew test cvc4
   - cvc4 --version
-  - unset -f cd
-  - unset -f pushd
-  - unset -f popd
 
 notifications:
   email:
