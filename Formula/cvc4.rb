@@ -8,8 +8,6 @@ class Cvc4 < Formula
 
   depends_on "boost" => :build
   depends_on "gmp"
-  depends_on "libantlr3c"
-  depends_on "antlr@3" => :build
   depends_on :java if build.with? "java-bindings"
   depends_on "swig@2" => :build if build.with? "java-bindings"
   depends_on :arch => :x86_64
@@ -20,7 +18,8 @@ class Cvc4 < Formula
             "--with-compat",
             "--bsd",
             "--with-gmp",
-            "--with-antlr-dir=#{Formula["libantlr3c"].opt_prefix}",
+            "--with-antlr-dir=#{buildpath}/antlr-3.4",
+            "ANTLR=#{buildpath}/antlr-3.4/bin/antlr3",
             "--prefix=#{prefix}"]
 
 
@@ -30,6 +29,7 @@ class Cvc4 < Formula
       args << "CXXFLAGS=-I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/JavaVM.framework/Versions/A/Headers/"
     end
 
+    system "contrib/get-antlr-3.4"
     system "./configure", *args
     system "make", "install"
   end
