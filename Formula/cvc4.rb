@@ -39,7 +39,7 @@ class Cvc4 < Formula
   end
 
   test do
-    (testpath/"simple.cvc").write <<-EOS.undent
+    (testpath/"simple.cvc").write <<~EOS
       x0, x1, x2, x3 : BOOLEAN;
       ASSERT x1 OR NOT x0;
       ASSERT x0 OR NOT x3;
@@ -50,7 +50,7 @@ class Cvc4 < Formula
     EOS
     result = shell_output "#{bin}/cvc4 #{(testpath/"simple.cvc")}"
     assert_match /valid/, result
-    (testpath/"simple.smt").write <<-EOS.undent
+    (testpath/"simple.smt").write <<~EOS
       (set-option :produce-models true)
       (set-logic QF_BV)
       (define-fun s_2 () Bool false)
