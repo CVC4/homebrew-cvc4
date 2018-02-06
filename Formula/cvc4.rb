@@ -7,6 +7,7 @@ class Cvc4 < Formula
   option "with-java-bindings", "Compile with Java bindings"
 
   depends_on "boost" => :build
+  depends_on "coreutils" => :build
   depends_on "gmp"
   depends_on :java if build.with? "java-bindings"
   depends_on "swig@2" => :build if build.with? "java-bindings"
