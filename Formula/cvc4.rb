@@ -7,9 +7,8 @@ class Cvc4 < Formula
   option "with-java-bindings", "Compile with Java bindings"
 
   depends_on "boost" => :build
+  depends_on "coreutils" => :build
   depends_on "gmp"
-  depends_on "libantlr3c"
-  depends_on "antlr@3" => :build
   depends_on :java if build.with? "java-bindings"
   depends_on "swig@2" => :build if build.with? "java-bindings"
   depends_on :arch => :x86_64
@@ -20,7 +19,8 @@ class Cvc4 < Formula
             "--with-compat",
             "--bsd",
             "--with-gmp",
-            "--with-antlr-dir=#{Formula["libantlr3c"].opt_prefix}",
+            "--with-antlr-dir=#{buildpath}/antlr-3.4",
+            "ANTLR=#{buildpath}/antlr-3.4/bin/antlr3",
             "--prefix=#{prefix}"]
 
 
@@ -30,6 +30,7 @@ class Cvc4 < Formula
       args << "CXXFLAGS=-I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/JavaVM.framework/Versions/A/Headers/"
     end
 
+    system "contrib/get-antlr-3.4"
     system "./configure", *args
     system "make", "install"
   end
@@ -39,7 +40,7 @@ class Cvc4 < Formula
   end
 
   test do
-    (testpath/"simple.cvc").write <<-EOS.undent
+    (testpath/"simple.cvc").write <<~EOS
       x0, x1, x2, x3 : BOOLEAN;
       ASSERT x1 OR NOT x0;
       ASSERT x0 OR NOT x3;
@@ -50,7 +51,7 @@ class Cvc4 < Formula
     EOS
     result = shell_output "#{bin}/cvc4 #{(testpath/"simple.cvc")}"
     assert_match /valid/, result
-    (testpath/"simple.smt").write <<-EOS.undent
+    (testpath/"simple.smt").write <<~EOS
       (set-option :produce-models true)
       (set-logic QF_BV)
       (define-fun s_2 () Bool false)
