@@ -9,6 +9,7 @@ class Cvc4 < Formula
   depends_on "boost" => :build
   depends_on "coreutils" => :build
   depends_on "gmp"
+  depends_on "readline" => :optional
   depends_on :java if build.with? "java-bindings"
   depends_on "swig@2" => :build if build.with? "java-bindings"
   depends_on :arch => :x86_64
@@ -17,7 +18,6 @@ class Cvc4 < Formula
     args = ["--enable-static",
             "--enable-shared",
             "--with-compat",
-            "--bsd",
             "--with-gmp",
             "--with-antlr-dir=#{buildpath}/antlr-3.4",
             "ANTLR=#{buildpath}/antlr-3.4/bin/antlr3",
@@ -29,6 +29,9 @@ class Cvc4 < Formula
       args << "CFLAGS=-I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/JavaVM.framework/Versions/A/Headers/"
       args << "CXXFLAGS=-I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/JavaVM.framework/Versions/A/Headers/"
     end
+
+    args << "--enable-gpl" if build.with? "readline"
+    args << "--with-readline" if build.with? "readline"
 
     system "contrib/get-antlr-3.4"
     system "./configure", *args
