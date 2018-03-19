@@ -5,6 +5,7 @@ class Cvc4 < Formula
   sha256 "5d6b4f8ee8420f85e3f804181341cedf6ea32342c48f355a5be87754152b14e9"
 
   option "with-java-bindings", "Compile with Java bindings"
+  option "with-gpl", "Allow building against GPL'ed libraries"
 
   depends_on "boost" => :build
   depends_on "coreutils" => :build
@@ -18,6 +19,7 @@ class Cvc4 < Formula
     args = ["--enable-static",
             "--enable-shared",
             "--with-compat",
+            allow_gpl? ? "--enable-gpl" : "--bsd",
             "--with-gmp",
             "--with-antlr-dir=#{buildpath}/antlr-3.4",
             "ANTLR=#{buildpath}/antlr-3.4/bin/antlr3",
@@ -30,8 +32,10 @@ class Cvc4 < Formula
       args << "CXXFLAGS=-I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/JavaVM.framework/Versions/A/Headers/"
     end
 
-    args << "--enable-gpl" if build.with? "readline"
-    args << "--with-readline" if build.with? "readline"
+    if build.with? "readline"
+      gpl_dependency "readline"
+      args << "--with-readline"
+    end
 
     system "contrib/get-antlr-3.4"
     system "./configure", *args
@@ -64,5 +68,15 @@ class Cvc4 < Formula
     EOS
     result = shell_output "#{bin}/cvc4 --lang smt #{(testpath/"simple.smt")}"
     assert_match /unsat/, result
+  end
+
+  private
+
+  def allow_gpl?
+    build.with?("gpl")
+  end
+
+  def gpl_dependency(dep)
+    odie "--with-gpl is required to build with #{dep}" unless allow_gpl?
   end
 end
