@@ -12,6 +12,7 @@ class Cvc4 < Formula
   depends_on "gmp"
   depends_on :java if build.with? "java-bindings"
   depends_on "swig@2" => :build if build.with? "java-bindings"
+  depends_on "autoconf" => :build if build.devel?
   depends_on :arch => :x86_64
 
   def install
