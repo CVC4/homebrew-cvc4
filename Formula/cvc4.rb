@@ -38,6 +38,7 @@ class Cvc4 < Formula
 
   devel do
     url "https://github.com/CVC4/CVC4/archive/master.zip"
+    version "unstable"
   end
 
   test do
