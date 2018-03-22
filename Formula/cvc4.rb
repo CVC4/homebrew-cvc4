@@ -36,7 +36,7 @@ class Cvc4 < Formula
   end
 
   devel do
-    url "https://cvc4.cs.stanford.edu/downloads/builds/src/unstable/latest-unstable.tar.gz"
+    url "https://github.com/CVC4/CVC4/archive/master.zip"
   end
 
   test do
