@@ -32,7 +32,7 @@ class Cvc4 < Formula
     end
 
     system "contrib/get-antlr-3.4"
-    system "./autogen.sh" if build.devel
+    system "./autogen.sh" if build.devel?
     system "./configure", *args
     system "make", "install"
   end
