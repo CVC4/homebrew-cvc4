@@ -9,6 +9,7 @@ class Cvc4 < Formula
 
   depends_on "boost" => :build
   depends_on "coreutils" => :build
+  depends_on "python3" => :build
   depends_on "gmp"
   depends_on :java if build.with? "java-bindings"
   depends_on "swig@2" => :build if build.with? "java-bindings"
