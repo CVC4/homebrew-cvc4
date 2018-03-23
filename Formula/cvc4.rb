@@ -37,7 +37,12 @@ class Cvc4 < Formula
 
     system "contrib/get-antlr-3.4"
     system "./autogen.sh" if build.devel?
-    system "./configure", *args, "||", "cat", "builds/config.log"
+    begin
+      system "./configure", *args
+    rescue BuildError
+      system "cat", "builds/config.log"
+      raise
+    end
     system "make", "install"
   end
 
