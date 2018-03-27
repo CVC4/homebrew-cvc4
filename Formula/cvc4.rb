@@ -36,18 +36,13 @@ class Cvc4 < Formula
 
     system "contrib/get-antlr-3.4"
     system "./autogen.sh" if build.devel?
-    begin
-      system "./configure", *args
-    rescue BuildError
-      system "cat", "builds/config.log"
-      raise
-    end
+    system "./configure", *args
     system "make", "install"
   end
 
   devel do
     url "https://github.com/CVC4/CVC4/archive/master.zip"
-    version "unstable"
+    version "1.6"
   end
 
   test do
