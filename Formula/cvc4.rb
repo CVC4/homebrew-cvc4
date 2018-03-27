@@ -28,7 +28,6 @@ class Cvc4 < Formula
             "ANTLR=#{buildpath}/antlr-3.4/bin/antlr3",
             "--prefix=#{prefix}"]
 
-
     if build.with? "java-bindings"
       args << "--enable-language-bindings=java"
       args << "CFLAGS=-I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/JavaVM.framework/Versions/A/Headers/"
