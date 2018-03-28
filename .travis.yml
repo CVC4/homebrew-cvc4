@@ -11,8 +11,8 @@ cache:
 env:
   matrix:
     - FORMULA_VERSION= OPTS=
-    - FORMULA_VERSION=--devel OPTS=
-    - FORMULA_VERSION=--devel OPTS=--with-java-bindings
+    - FORMULA_VERSION=--HEAD OPTS=
+    - FORMULA_VERSION=--HEAD OPTS=--with-java-bindings
 
 before_install:
   - export TRAVIS_COMMIT="$(git rev-parse --verify -q HEAD)"
