@@ -3,6 +3,7 @@ class Cvc4 < Formula
   homepage "https://cvc4.cs.stanford.edu/"
   url "https://cvc4.cs.stanford.edu/downloads/builds/src/cvc4-1.5.tar.gz"
   sha256 "5d6b4f8ee8420f85e3f804181341cedf6ea32342c48f355a5be87754152b14e9"
+  head "https://github.com/CVC4/CVC4.git"
   version "1.5"
 
   option "with-java-bindings", "Compile with Java bindings"
@@ -35,14 +36,9 @@ class Cvc4 < Formula
     end
 
     system "contrib/get-antlr-3.4"
-    system "./autogen.sh" if build.devel?
+    system "./autogen.sh" if build.head?
     system "./configure", *args
     system "make", "install"
-  end
-
-  devel do
-    url "https://github.com/CVC4/CVC4/archive/master.zip"
-    version "1.6"
   end
 
   test do
