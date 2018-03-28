@@ -10,9 +10,9 @@ cache:
 
 env:
   matrix:
-    - FORMULA_VERSION= OPTS=
-    - FORMULA_VERSION=--HEAD OPTS=
-    - FORMULA_VERSION=--HEAD OPTS=--with-java-bindings
+    - FORMULA_VERSION= FORMULA_OPTS=
+    - FORMULA_VERSION=--HEAD FORMULA_OPTS=
+    - FORMULA_VERSION=--HEAD FORMULA_OPTS=--with-java-bindings
 
 before_install:
   - export TRAVIS_COMMIT="$(git rev-parse --verify -q HEAD)"
@@ -34,7 +34,7 @@ before_install:
 script:
   - brew doctor || true
   - brew config
-  - brew install $FORMULA_VERSION cvc4/cvc4/cvc4 $OPTS --verbose
+  - brew install cvc4/cvc4/cvc4 ${FORMULA_VERSION} ${FORMULA_OPTS} --verbose
   - brew test cvc4
   - cvc4 --version
 
