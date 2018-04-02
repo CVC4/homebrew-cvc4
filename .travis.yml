@@ -13,8 +13,9 @@ before_install:
   - brew update
 
 install:
-  - cd $(brew --repo)/Library/Taps/travis/cvc4/homebrew-cvc4
-  - git checkout ${TRAVIS_COMMIT}
+  - mkdir -p $(brew --repo)/Library/Taps/cvc4
+  - ln -s $PWD $(brew --repo)/Library/Taps/cvc4/homebrew-cvc4
+  - brew tap --repair
 
 script:
   - brew audit cvc4/cvc4/cvc4
