@@ -9,7 +9,6 @@ env:
     - FORMULA_VERSION=--HEAD FORMULA_OPTS=--with-java-bindings
 
 before_install:
-  - brew tap cvc4/cvc4
   - brew update
 
 install:
