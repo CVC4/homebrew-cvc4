@@ -10,6 +10,7 @@ env:
 
 before_install:
   - brew update
+  - brew upgrade
 
 install:
   - mkdir -p $(brew --repo)/Library/Taps/cvc4
@@ -18,7 +19,8 @@ install:
 
 script:
   - brew audit cvc4/cvc4/cvc4 || true
-  - brew install cvc4/cvc4/cvc4 ${FORMULA_VERSION} ${FORMULA_OPTS} --verbose
+  - brew install cvc4/cvc4/cvc4 ${FORMULA_VERSION} ${FORMULA_OPTS} --verbose || true
+  - brew doctor
   - brew test cvc4
   - cvc4 --version
 
