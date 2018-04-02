@@ -12,7 +12,7 @@ before_install:
   - brew update
 
 install:
-  - mkdir -p $(brew --repo)/Library/Taps/travis
+  - mkdir -p $(brew --repo)/Library/Taps/travis/cvc4
   - ln -s $PWD $(brew --repo)/Library/Taps/travis/cvc4/homebrew-cvc4
   - brew tap --repair
 
