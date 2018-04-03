@@ -3,16 +3,21 @@ class Cvc4 < Formula
   homepage "https://cvc4.cs.stanford.edu/"
   url "https://cvc4.cs.stanford.edu/downloads/builds/src/cvc4-1.5.tar.gz"
   sha256 "5d6b4f8ee8420f85e3f804181341cedf6ea32342c48f355a5be87754152b14e9"
+  head "https://github.com/CVC4/CVC4.git"
 
   option "with-java-bindings", "Compile with Java bindings"
   option "with-gpl", "Allow building against GPL'ed libraries"
 
   depends_on "boost" => :build
   depends_on "coreutils" => :build
+  depends_on "python" => :build
   depends_on "gmp"
   depends_on "readline" => :optional
   depends_on :java if build.with? "java-bindings"
   depends_on "swig@2" => :build if build.with? "java-bindings"
+  depends_on "autoconf" => :build if build.head?
+  depends_on "automake" => :build if build.head?
+  depends_on "libtool" => :build if build.head?
   depends_on :arch => :x86_64
 
   def install
@@ -24,7 +29,6 @@ class Cvc4 < Formula
             "--with-antlr-dir=#{buildpath}/antlr-3.4",
             "ANTLR=#{buildpath}/antlr-3.4/bin/antlr3",
             "--prefix=#{prefix}"]
-
 
     if build.with? "java-bindings"
       args << "--enable-language-bindings=java"
@@ -38,12 +42,9 @@ class Cvc4 < Formula
     end
 
     system "contrib/get-antlr-3.4"
+    system "./autogen.sh" if build.head?
     system "./configure", *args
     system "make", "install"
-  end
-
-  devel do
-    url "https://cvc4.cs.stanford.edu/downloads/builds/src/unstable/latest-unstable.tar.gz"
   end
 
   test do
