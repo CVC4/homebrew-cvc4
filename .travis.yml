@@ -10,7 +10,7 @@ env:
 
 before_install:
   - brew update
-  - brew upgrade
+  - brew upgrade python
 
 install:
   - mkdir -p $(brew --repo)/Library/Taps/cvc4
