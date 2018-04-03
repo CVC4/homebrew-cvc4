@@ -5,12 +5,12 @@ CVC4 using this tap, use the following commands:
 
 ```
 $ brew tap cvc4/cvc4
-$ brew [--devel] install cvc4/cvc4/cvc4 [--with-java-bindings]
+$ brew install cvc4/cvc4/cvc4 [--HEAD] [--with-java-bindings]
 ```
 
 The CVC4 formula supports the following optional arguments:
 
-- `--devel`: Builds the nightly version of CVC4
+- `--HEAD`: Builds the current master branch of CVC4
 - `--with-java-bindings`: installs the Java bindings for CVC4
 
 ## Using the Java bindings
