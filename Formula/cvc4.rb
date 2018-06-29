@@ -1,8 +1,8 @@
 class Cvc4 < Formula
   desc "Open-source automatic theorem prover for SMT"
   homepage "https://cvc4.cs.stanford.edu/"
-  url "https://cvc4.cs.stanford.edu/downloads/builds/src/cvc4-1.5.tar.gz"
-  sha256 "5d6b4f8ee8420f85e3f804181341cedf6ea32342c48f355a5be87754152b14e9"
+  url "https://cvc4.cs.stanford.edu/downloads/builds/src/cvc4-1.6.tar.gz"
+  sha256 "5c18bd5ea893fba9723a4d35c889d412ec6d29a21db9db69481891a8ff4887c7"
   head "https://github.com/CVC4/CVC4.git"
 
   option "with-java-bindings", "Compile with Java bindings"
