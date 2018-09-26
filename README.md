@@ -12,6 +12,9 @@ The CVC4 formula supports the following optional arguments:
 
 - `--HEAD`: Builds the current master branch of CVC4
 - `--with-java-bindings`: installs the Java bindings for CVC4
+- `--with-readline`: installs optional Readline support for improved
+  text-editing support in interactive mode. Requires the `enable-gpl` option
+- `--enable-gpl`: Permit GPL dependences, if available
 
 ## Using the Java bindings
 

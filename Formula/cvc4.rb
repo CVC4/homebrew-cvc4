@@ -6,11 +6,13 @@ class Cvc4 < Formula
   head "https://github.com/CVC4/CVC4.git"
 
   option "with-java-bindings", "Compile with Java bindings"
+  option "with-gpl", "Allow building against GPL'ed libraries"
 
   depends_on "boost" => :build
   depends_on "coreutils" => :build
   depends_on "python" => :build
   depends_on "gmp"
+  depends_on "readline" => :optional
   depends_on :java if build.with? "java-bindings"
   depends_on "swig"
   depends_on "autoconf" => :build if build.head?
@@ -22,7 +24,7 @@ class Cvc4 < Formula
     args = ["--enable-static",
             "--enable-shared",
             "--with-compat",
-            "--bsd",
+            allow_gpl? ? "--enable-gpl" : "--bsd",
             "--with-gmp",
             "--with-antlr-dir=#{buildpath}/antlr-3.4",
             "ANTLR=#{buildpath}/antlr-3.4/bin/antlr3",
@@ -32,6 +34,11 @@ class Cvc4 < Formula
       args << "--enable-language-bindings=java"
       args << "CFLAGS=-I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/JavaVM.framework/Versions/A/Headers/"
       args << "CXXFLAGS=-I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/JavaVM.framework/Versions/A/Headers/"
+    end
+
+    if build.with? "readline"
+      gpl_dependency "readline"
+      args << "--with-readline"
     end
 
     system "contrib/get-antlr-3.4"
@@ -62,5 +69,15 @@ class Cvc4 < Formula
     EOS
     result = shell_output "#{bin}/cvc4 --lang smt #{(testpath/"simple.smt")}"
     assert_match /unsat/, result
+  end
+
+  private
+
+  def allow_gpl?
+    build.with?("gpl")
+  end
+
+  def gpl_dependency(dep)
+    odie "--with-gpl is required to build with #{dep}" unless allow_gpl?
   end
 end
