@@ -16,9 +16,8 @@ class Cvc4 < Formula
   depends_on "readline" => :optional
   depends_on :java if build.with? "java-bindings"
   depends_on "swig"
-  depends_on "autoconf" => :build if build.head?
-  depends_on "automake" => :build if build.head?
-  depends_on "libtool" => :build if build.head?
+  depends_on "automake" => :build if not build.head?
+  depends_on "libtool" => :build if not build.head?
   depends_on :arch => :x86_64
 
   def install
