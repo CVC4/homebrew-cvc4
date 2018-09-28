@@ -10,30 +10,23 @@ class Cvc4 < Formula
 
   depends_on "boost" => :build
   depends_on "coreutils" => :build
+  depends_on "cmake" => :build
   depends_on "python" => :build
   depends_on "gmp"
   depends_on "readline" => :optional
   depends_on :java if build.with? "java-bindings"
   depends_on "swig"
-  depends_on "autoconf" => :build if build.head?
-  depends_on "automake" => :build if build.head?
-  depends_on "libtool" => :build if build.head?
   depends_on :arch => :x86_64
 
   def install
-    args = ["--enable-static",
-            "--enable-shared",
-            "--with-compat",
-            allow_gpl? ? "--enable-gpl" : "--bsd",
-            "--with-gmp",
-            "--with-antlr-dir=#{buildpath}/antlr-3.4",
-            "ANTLR=#{buildpath}/antlr-3.4/bin/antlr3",
-            "--prefix=#{prefix}"]
+    args = ["--prefix=#{prefix}"]
 
     if build.with? "java-bindings"
-      args << "--enable-language-bindings=java"
-      args << "CFLAGS=-I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/JavaVM.framework/Versions/A/Headers/"
-      args << "CXXFLAGS=-I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/JavaVM.framework/Versions/A/Headers/"
+      args << "--language-bindings=java"
+    end
+
+    if allow_gpl
+      args << "--gpl"
     end
 
     if build.with? "readline"
@@ -42,9 +35,10 @@ class Cvc4 < Formula
     end
 
     system "contrib/get-antlr-3.4"
-    system "./autogen.sh" if build.head?
-    system "./configure", *args
-    system "make", "install"
+    system "./configure.sh", *args
+    chdir "build" do
+      system "make", "install"
+    end
   end
 
   test do
