@@ -67,6 +67,7 @@ class Cvc4 < Formula
       system "./configure", *args
       system "make", "install"
     end
+  end
 
   test do
     (testpath/"simple.cvc").write <<~EOS
