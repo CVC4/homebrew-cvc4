@@ -25,7 +25,7 @@ class Cvc4 < Formula
       args << "--language-bindings=java"
     end
 
-    if allow_gpl
+    if allow_gpl?
       args << "--gpl"
     end
 
