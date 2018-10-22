@@ -18,6 +18,7 @@ class Cvc4 < Formula
   depends_on "swig"
   depends_on "automake" => :build if not build.head?
   depends_on "libtool" => :build if not build.head?
+  depends_on "cryptominisat" => :recommended
   depends_on :arch => :x86_64
 
   def install
@@ -26,6 +27,7 @@ class Cvc4 < Formula
 
     if build.head?
       args = ["--prefix=#{prefix}",
+              "--cryptominisat",
               "--symfpu"]
 
       if build.with? "java-bindings"
@@ -52,7 +54,8 @@ class Cvc4 < Formula
               allow_gpl? ? "--enable-gpl" : "--bsd",
               "--with-gmp",
               "--prefix=#{prefix}",
-              "--with-symfpu"]
+              "--with-symfpu",
+              "--with-cryptominisat"]
 
       if build.with? "java-bindings"
         args << "--enable-language-bindings=java"
