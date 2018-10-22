@@ -22,9 +22,11 @@ class Cvc4 < Formula
 
   def install
     system "contrib/get-antlr-3.4"
+    system "contrib/get-symfpu"
 
     if build.head?
-      args = ["--prefix=#{prefix}"]
+      args = ["--prefix=#{prefix}",
+              "--symfpu"]
 
       if build.with? "java-bindings"
         args << "--language-bindings=java"
@@ -49,7 +51,8 @@ class Cvc4 < Formula
               "--with-compat",
               allow_gpl? ? "--enable-gpl" : "--bsd",
               "--with-gmp",
-              "--prefix=#{prefix}"]
+              "--prefix=#{prefix}",
+              "--with-symfpu"]
 
       if build.with? "java-bindings"
         args << "--enable-language-bindings=java"
@@ -62,7 +65,6 @@ class Cvc4 < Formula
         args << "--with-readline"
       end
 
-      system "./autogen.sh" if build.head?
       system "./configure", *args
       system "make", "install"
     end
