@@ -22,7 +22,7 @@ script:
   - brew audit cvc4/cvc4/cvc4
   - brew install cvc4/cvc4/cvc4 ${FORMULA_VERSION} ${FORMULA_OPTS} --verbose
   - brew test cvc4
-  - cvc4 --version
+  - cvc4 --show-config
 
 notifications:
   email:
