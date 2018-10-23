@@ -7,6 +7,7 @@ class Cryptominisat < Formula
   depends_on "boost" => :recommended
   depends_on "cmake" => :build
   depends_on "python" => :recommended
+  depends_on "zlib" => :recommended
   depends_on :arch => :x86_64
 
   def install
