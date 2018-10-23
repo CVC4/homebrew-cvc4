@@ -18,6 +18,7 @@ class Cvc4 < Formula
   depends_on "swig"
   depends_on "automake" => :build if not build.head?
   depends_on "libtool" => :build if not build.head?
+  depends_on "cryptominisat" => :recommended if build.head?
   depends_on :arch => :x86_64
 
   def install
@@ -26,7 +27,8 @@ class Cvc4 < Formula
 
     if build.head?
       args = ["--prefix=#{prefix}",
-              "--symfpu"]
+              "--symfpu",
+              "--cryptominisat"]
 
       if build.with? "java-bindings"
         args << "--language-bindings=java"
