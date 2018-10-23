@@ -27,8 +27,8 @@ class Cvc4 < Formula
 
     if build.head?
       args = ["--prefix=#{prefix}",
-              "--cryptominisat",
-              "--symfpu"]
+              "--symfpu",
+              "--cryptominisat"]
 
       if build.with? "java-bindings"
         args << "--language-bindings=java"
