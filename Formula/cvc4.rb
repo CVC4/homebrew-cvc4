@@ -56,7 +56,6 @@ class Cvc4 < Formula
               "--prefix=#{prefix}",
               "--with-symfpu",
               "--with-cryptominisat"]
-              "--with-symfpu"]
 
       if build.with? "java-bindings"
         args << "--enable-language-bindings=java"
