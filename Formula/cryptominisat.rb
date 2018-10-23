@@ -9,7 +9,7 @@ class Cryptominisat < Formula
 
   def install
     mkdir "build" do
-      system "cmake", "-DCMAKE_INSTALL_PREFIX=#{prefix}", ".."
+      system "cmake", "-DCMAKE_INSTALL_PREFIX=#{prefix}", "-DENABLE_PYTHON_INTERFACE=OFF", "-DNOM4RI=ON", ".."
       system "make", "install"
     end
   end
