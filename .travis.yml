@@ -12,6 +12,7 @@ before_install:
   - brew update
   - brew upgrade python
   - brew upgrade automake
+  - brew remove wget
 
 install:
   - mkdir -p $(brew --repo)/Library/Taps/cvc4
