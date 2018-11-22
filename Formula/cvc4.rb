@@ -18,6 +18,10 @@ class Cvc4 < Formula
   depends_on "swig"
   depends_on "automake" => :build if not build.head?
   depends_on "libtool" => :build if not build.head?
+  # wget is required for the 1.6 release because it lacks the fix for following
+  # redirects when using cURL:
+  # https://github.com/CVC4/CVC4/commit/fc07d6af4156fde8af048ca5db8ff1f43de48ebc
+  depends_on "wget" => :build if not build.head?
   depends_on "cryptominisat" => :recommended if build.head?
   depends_on :arch => :x86_64
 
