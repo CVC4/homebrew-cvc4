@@ -22,6 +22,7 @@ install:
 
 script:
   - brew audit cvc4/cvc4/cvc4
+  - [ -n "$FORMULA_VERSION" ] && brew install cryptominisat
   - brew install cvc4/cvc4/cvc4 ${FORMULA_VERSION} ${FORMULA_OPTS} --verbose
   - brew test cvc4
   - cvc4 --version
