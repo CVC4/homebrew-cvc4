@@ -16,6 +16,9 @@ The CVC4 formula supports the following optional arguments:
   text-editing support in interactive mode. Requires the `with-gpl` option
 - `--with-gpl`: Permit GPL dependences, if available
 
+By default, CVC4 is built with
+[CryptoMiniSat](https://github.com/msoos/cryptominisat) support.
+
 ## Using the Java bindings
 
 The following instructions assume that CVC4 is installed with the Java bindings
