@@ -10,7 +10,7 @@ class Cvc4 < Formula
 
   depends_on "boost" => :build
   depends_on "coreutils" => :build
-  depends_on "cmake" => :build if build.head?
+  depends_on "cmake"
   depends_on "python" => :build
   depends_on "gmp"
   depends_on "readline" => :optional
