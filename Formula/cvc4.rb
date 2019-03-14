@@ -63,6 +63,7 @@ class Cvc4 < Formula
               "--prefix=#{prefix}",
               "--with-symfpu",
               "--with-cryptominisat",
+              "--with-cryptominisat-dir=#{prefix}",
               "--with-lfsc",
               "--with-cadical"]
 
