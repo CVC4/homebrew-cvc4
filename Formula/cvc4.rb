@@ -32,27 +32,26 @@ class Cvc4 < Formula
     system "contrib/get-cadical"
 
     if build.head?
-      args = ["--prefix=#{prefix}",
-              "--symfpu",
-              "--cryptominisat",
-              "--lfsc",
-              "--cadical"]
+      args = ["-DUSE_SYMFPU=ON",
+              "-DUSE_CRYPTOMINISAT=ON",
+              "-DUSE_LFSC=ON",
+              "-DUSE_CADICAL=ON"]
 
       if build.with? "java-bindings"
-        args << "--language-bindings=java"
+        args << "-DBUILD_BINDINGS_JAVA=ON"
       end
 
       if allow_gpl?
-        args << "--gpl"
+        args << "-DENABLE_GPL=ON"
       end
 
       if build.with? "readline"
         gpl_dependency "readline"
-        args << "--readline"
+        args << "-DUSE_READLINE=ON"
       end
 
-      system "./configure.sh", *args
-      chdir "build" do
+      mkdir "build" do
+        system "cmake", "..", *std_cmake_args, *args
         system "make", "install"
       end
     else
