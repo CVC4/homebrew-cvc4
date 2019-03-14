@@ -22,17 +22,21 @@ class Cvc4 < Formula
   # redirects when using cURL:
   # https://github.com/CVC4/CVC4/commit/fc07d6af4156fde8af048ca5db8ff1f43de48ebc
   depends_on "wget" => :build if not build.head?
-  depends_on "cryptominisat" => :recommended if build.head?
+  depends_on "cryptominisat"
   depends_on :arch => :x86_64
 
   def install
     system "contrib/get-antlr-3.4"
     system "contrib/get-symfpu"
+    system "contrib/get-lfsc-checker"
+    system "contrib/get-cadical"
 
     if build.head?
       args = ["--prefix=#{prefix}",
               "--symfpu",
-              "--cryptominisat"]
+              "--cryptominisat",
+              "--lfsc",
+              "--cadical"]
 
       if build.with? "java-bindings"
         args << "--language-bindings=java"
@@ -58,7 +62,10 @@ class Cvc4 < Formula
               allow_gpl? ? "--enable-gpl" : "--bsd",
               "--with-gmp",
               "--prefix=#{prefix}",
-              "--with-symfpu"]
+              "--with-symfpu",
+              "--with-cryptominisat",
+              "--with-lfsc",
+              "--with-cadical"]
 
       if build.with? "java-bindings"
         args << "--enable-language-bindings=java"
