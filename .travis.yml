@@ -11,7 +11,6 @@ env:
 before_install:
   - brew update
   - brew upgrade python
-  - brew upgrade automake
   # Make sure that the formula works without wget installed
   - brew remove wget
 
