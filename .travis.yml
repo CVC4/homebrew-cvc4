@@ -9,6 +9,7 @@ env:
     - FORMULA_VERSION=--HEAD FORMULA_OPTS=--with-java-bindings
 
 before_install:
+  - brew update
   # Make sure that the formula works without wget installed
   - brew remove wget
 
