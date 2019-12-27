@@ -38,7 +38,8 @@ class Cvc4 < Formula
 
     args = ["--prefix=#{prefix}",
             "--symfpu",
-            "--cryptominisat"]
+            "--cryptominisat",
+            "--python3"]
 
     if build.with? "java-bindings"
       args << "--language-bindings=java"
