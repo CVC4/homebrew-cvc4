@@ -1,4 +1,9 @@
 class Cvc4 < Formula
+  resource "toml" do
+    url "https://files.pythonhosted.org/packages/b9/19/5cbd78eac8b1783671c40e34bb0fa83133a06d340a38b55c645076d40094/toml-0.10.0.tar.gz"
+    sha256 "229f81c57791a41d65e399fc06bf0848bab550a9dfd5ed66df18ce5f05e73d5c"
+  end
+
   desc "Open-source automatic theorem prover for SMT"
   homepage "https://cvc4.cs.stanford.edu/"
   url "https://github.com/CVC4/CVC4/archive/1.7.tar.gz"
@@ -21,6 +26,10 @@ class Cvc4 < Formula
   depends_on :arch => :x86_64
 
   def install
+    if build.head?
+      virtualenv_install_with_resources
+    end
+
     system "contrib/get-antlr-3.4"
     system "contrib/get-symfpu"
 
