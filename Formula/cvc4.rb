@@ -9,7 +9,7 @@ class Cvc4 < Formula
   option "with-gpl", "Allow building against GPL'ed libraries"
 
   depends_on "coreutils" => :build
-  depends_on "cmake" => :build if build.head?
+  depends_on "cmake" => :build
   depends_on "python" => :build
   depends_on "gmp"
   depends_on "readline" => :optional
