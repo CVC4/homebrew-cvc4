@@ -29,7 +29,7 @@ class Cvc4 < Formula
 
   def install
     if build.head?
-      virtualenv_install_with_resources
+      virtualenv_install_with_resources(:using => "python3")
     end
 
     system "contrib/get-antlr-3.4"
