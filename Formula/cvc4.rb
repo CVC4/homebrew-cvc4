@@ -1,4 +1,6 @@
 class Cvc4 < Formula
+  include Language::Python::Virtualenv
+
   desc "Open-source automatic theorem prover for SMT"
   homepage "https://cvc4.cs.stanford.edu/"
   url "https://github.com/CVC4/CVC4/archive/1.7.tar.gz"
