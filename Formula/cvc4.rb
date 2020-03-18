@@ -37,9 +37,10 @@ class Cvc4 < Formula
             "--python3"]
 
     if build.head?
-      venv = virtualenv_create(libexec, "python3")
+      venv_root = "#{buildpath}/venv"
+      venv = virtualenv_create(venv_root, "python3")
       venv.pip_install resources
-      args << "--python-dir=#{@venv_root}"
+      args << "--python-dir=#{venv_root}"
     end
 
     if build.with? "java-bindings"
