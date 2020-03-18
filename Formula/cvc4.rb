@@ -5,7 +5,7 @@ class Cvc4 < Formula
   homepage "https://cvc4.cs.stanford.edu/"
   url "https://github.com/CVC4/CVC4/archive/1.7.tar.gz"
   sha256 "9864a364a0076ef7ff63a46cdbc69cbe6568604149626338598d4df7788f8c2e"
-  head "https://github.com/CVC4/CVC4.git"
+  head "git@github.com:4tXJ7f/CVC4.git", :branch => "python_path"
 
   option "with-java-bindings", "Compile with Java bindings"
   option "with-gpl", "Allow building against GPL'ed libraries"
@@ -28,13 +28,6 @@ class Cvc4 < Formula
   end
 
   def install
-    if build.head?
-      venv = virtualenv_create(libexec, "python3")
-      resources.each do |r|
-        venv.pip_install_and_link r
-      end
-    end
-
     system "contrib/get-antlr-3.4"
     system "contrib/get-symfpu"
 
@@ -42,6 +35,12 @@ class Cvc4 < Formula
             "--symfpu",
             "--cryptominisat",
             "--python3"]
+
+    if build.head?
+      venv = virtualenv_create(libexec, "python3")
+      venv.pip_install resources
+      args << "--python-dir=#{@venv_root}"
+    end
 
     if build.with? "java-bindings"
       args << "--language-bindings=java"
