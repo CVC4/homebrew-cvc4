@@ -30,6 +30,7 @@ class Cvc4 < Formula
   def run_in_venv(venv, cmd)
     cmd = ["source", "#{venv}/bin/activate", "&&"] + Shellwords.join(cmd)
     system "bash", "-c", cmd
+  end
 
   def install
     system "contrib/get-antlr-3.4"
