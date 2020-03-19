@@ -28,7 +28,7 @@ class Cvc4 < Formula
   end
 
   def run_in_venv(venv, cmd)
-    cmd = ["source", "#{venv}/bin/activate", "&&"] + Shellwords.join(cmd)
+    cmd = Shellwords.join(["source", "#{venv}/bin/activate", "&&"] + cmd)
     system "bash", "-c", cmd
   end
 
