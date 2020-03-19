@@ -5,7 +5,7 @@ class Cvc4 < Formula
   homepage "https://cvc4.cs.stanford.edu/"
   url "https://github.com/CVC4/CVC4/archive/1.7.tar.gz"
   sha256 "9864a364a0076ef7ff63a46cdbc69cbe6568604149626338598d4df7788f8c2e"
-  head "https://github.com/4tXJ7f/CVC4.git", :branch => "python_path"
+  head "https://github.com/CVC4/CVC4.git"
 
   option "with-java-bindings", "Compile with Java bindings"
   option "with-gpl", "Allow building against GPL'ed libraries"
@@ -27,6 +27,10 @@ class Cvc4 < Formula
     sha256 "229f81c57791a41d65e399fc06bf0848bab550a9dfd5ed66df18ce5f05e73d5c"
   end
 
+  def run_in_venv(venv, cmd)
+    cmd = ["source", "#{venv}/bin/activate", "&&"] + Shellwords.join(cmd)
+    system "bash", "-c", cmd
+
   def install
     system "contrib/get-antlr-3.4"
     system "contrib/get-symfpu"
@@ -36,11 +40,10 @@ class Cvc4 < Formula
             "--cryptominisat",
             "--python3"]
 
+    venv_root = "#{buildpath}/venv"
     if build.head?
-      venv_root = "#{buildpath}/venv"
       venv = virtualenv_create(venv_root, "python3")
       venv.pip_install resources
-      args << "--python-dir=#{venv_root}"
     end
 
     if build.with? "java-bindings"
@@ -56,9 +59,16 @@ class Cvc4 < Formula
       args << "--readline"
     end
 
-    system "./configure.sh", *args
-    chdir "build" do
-      system "make", "install"
+    if build.head?
+      run_in_venv(venv_root, ["./configure.sh", *args])
+      chdir "build" do
+        run_in_venv(venv_root, ["make", "install"])
+      end
+    else
+      system "./configure.sh", *args
+      chdir "build" do
+        system "make", "install"
+      end
     end
   end
 
