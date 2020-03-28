@@ -10,17 +10,16 @@ class Cvc4 < Formula
   option "with-java-bindings", "Compile with Java bindings"
   option "with-gpl", "Allow building against GPL'ed libraries"
 
-  depends_on :arch => :x86_64
-  depends_on "automake" => :build if not build.head?
+  depends_on "automake" => :build
   depends_on "cmake" => :build
   depends_on "coreutils" => :build
   depends_on "cryptominisat" => :build
+  depends_on :arch => :x86_64
   depends_on "gmp"
-  depends_on :java if build.with? "java-bindings"
-  depends_on "libtool" => :build if not build.head?
-  depends_on "python" => :build
-  depends_on "readline" => :optional
   depends_on "swig"
+  depends_on "python" => :build
+  depends_on :java if build.with? "java-bindings"
+  depends_on "readline" => :optional
 
   resource "toml" do
     url "https://files.pythonhosted.org/packages/b9/19/5cbd78eac8b1783671c40e34bb0fa83133a06d340a38b55c645076d40094/toml-0.10.0.tar.gz"
