@@ -38,14 +38,13 @@ class Cvc4 < Formula
 
     args = ["--prefix=#{prefix}",
             "--symfpu",
-            "--cryptominisat"]
+            "--cryptominisat",
+            "--python3"]
 
     venv_root = "#{buildpath}/venv"
     if build.head?
       venv = virtualenv_create(venv_root, "python3")
       venv.pip_install resources
-    else
-      args << "--python3"
     end
 
     if build.with? "java-bindings"
