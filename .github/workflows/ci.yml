@@ -15,7 +15,7 @@ jobs:
             config: --HEAD
             
           - name: head-java
-            config: --HEAD --java
+            config: --HEAD --with-java-bindings
             
     runs-on: macos-latest
 
