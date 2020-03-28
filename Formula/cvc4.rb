@@ -14,11 +14,11 @@ class Cvc4 < Formula
   depends_on "cmake" => :build
   depends_on "coreutils" => :build
   depends_on "cryptominisat" => :build
+  depends_on "python" => :build
   depends_on :arch => :x86_64
   depends_on "gmp"
-  depends_on "swig"
-  depends_on "python" => :build
   depends_on :java if build.with? "java-bindings"
+  depends_on "swig"
   depends_on "readline" => :optional
 
   resource "toml" do
