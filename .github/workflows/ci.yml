@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        name: [latest-release, head, head-java]
+
+        include:
+          - name: latest-release
+            
+          - name: head
+            config: --HEAD
+            
+          - name: head-java
+            config: --HEAD --java
+            
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Audit formula
+      run: brew audit cvc4/cvc4/cvc4
+
+    - name: Install formula
+      run: brew install -v ${GITHUB_WORKPLACE}/Formula/cvc4.rb ${{ matrix.config }}
+
+    - name: Test installation
+      run: brew test cvc4
+      
+    - name: Show config
+      run: cvc4 --show-config
