@@ -1,16 +1,17 @@
 class Cvc4 < Formula
+  include Language::Python::Virtualenv
+
   desc "Open-source automatic theorem prover for SMT"
   homepage "https://cvc4.cs.stanford.edu/"
-  url "https://cvc4.cs.stanford.edu/downloads/builds/src/cvc4-1.6.tar.gz"
-  sha256 "5c18bd5ea893fba9723a4d35c889d412ec6d29a21db9db69481891a8ff4887c7"
+  url "https://github.com/CVC4/CVC4/archive/1.7.tar.gz"
+  sha256 "9864a364a0076ef7ff63a46cdbc69cbe6568604149626338598d4df7788f8c2e"
   head "https://github.com/CVC4/CVC4.git"
 
   option "with-java-bindings", "Compile with Java bindings"
   option "with-gpl", "Allow building against GPL'ed libraries"
 
-  depends_on "boost" => :build
   depends_on "coreutils" => :build
-  depends_on "cmake" => :build if build.head?
+  depends_on "cmake" => :build
   depends_on "python" => :build
   depends_on "gmp"
   depends_on "readline" => :optional
@@ -18,61 +19,59 @@ class Cvc4 < Formula
   depends_on "swig"
   depends_on "automake" => :build if not build.head?
   depends_on "libtool" => :build if not build.head?
-  # wget is required for the 1.6 release because it lacks the fix for following
-  # redirects when using cURL:
-  # https://github.com/CVC4/CVC4/commit/fc07d6af4156fde8af048ca5db8ff1f43de48ebc
-  depends_on "wget" => :build if not build.head?
-  depends_on "cryptominisat" => :recommended if build.head?
+  depends_on "cryptominisat" => :build
   depends_on :arch => :x86_64
+
+  resource "toml" do
+    url "https://files.pythonhosted.org/packages/b9/19/5cbd78eac8b1783671c40e34bb0fa83133a06d340a38b55c645076d40094/toml-0.10.0.tar.gz"
+    sha256 "229f81c57791a41d65e399fc06bf0848bab550a9dfd5ed66df18ce5f05e73d5c"
+  end
+
+  def run_in_venv(venv, cmd)
+    activate = Shellwords.join(["source", "#{venv}/bin/activate"])
+    cmd_str = Shellwords.join(cmd)
+    system "bash", "-c", (activate + " && " + cmd_str)
+  end
 
   def install
     system "contrib/get-antlr-3.4"
     system "contrib/get-symfpu"
 
+    args = ["--prefix=#{prefix}",
+            "--symfpu",
+            "--cryptominisat"]
+
+    venv_root = "#{buildpath}/venv"
     if build.head?
-      args = ["--prefix=#{prefix}",
-              "--symfpu",
-              "--cryptominisat"]
+      venv = virtualenv_create(venv_root, "python3")
+      venv.pip_install resources
+    else
+      args << "--python3"
+    end
 
-      if build.with? "java-bindings"
-        args << "--language-bindings=java"
+    if build.with? "java-bindings"
+      args << "--language-bindings=java"
+    end
+
+    if allow_gpl?
+      args << "--gpl"
+    end
+
+    if build.with? "readline"
+      gpl_dependency "readline"
+      args << "--readline"
+    end
+
+    if build.head?
+      run_in_venv(venv_root, ["./configure.sh", *args])
+      chdir "build" do
+        run_in_venv(venv_root, ["make", "install"])
       end
-
-      if allow_gpl?
-        args << "--gpl"
-      end
-
-      if build.with? "readline"
-        gpl_dependency "readline"
-        args << "--readline"
-      end
-
+    else
       system "./configure.sh", *args
       chdir "build" do
         system "make", "install"
       end
-    else
-      args = ["--enable-static",
-              "--enable-shared",
-              "--with-compat",
-              allow_gpl? ? "--enable-gpl" : "--bsd",
-              "--with-gmp",
-              "--prefix=#{prefix}",
-              "--with-symfpu"]
-
-      if build.with? "java-bindings"
-        args << "--enable-language-bindings=java"
-        args << "CFLAGS=-I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/JavaVM.framework/Versions/A/Headers/"
-        args << "CXXFLAGS=-I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/JavaVM.framework/Versions/A/Headers/"
-      end
-
-      if build.with? "readline"
-        gpl_dependency "readline"
-        args << "--with-readline"
-      end
-
-      system "./configure", *args
-      system "make", "install"
     end
   end
 
