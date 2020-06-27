@@ -34,6 +34,9 @@ class Cvc4 < Formula
   end
 
   def install
+    venv = virtualenv_create(libexec, "python3")
+    venv.pip_install resources
+
     system "contrib/get-antlr-3.4"
     system "contrib/get-symfpu"
 
@@ -41,13 +44,7 @@ class Cvc4 < Formula
             "--symfpu",
             "--cryptominisat"]
 
-    venv_root = "#{buildpath}/venv"
-    if build.head?
-      venv = virtualenv_create(venv_root, "python3")
-      venv.pip_install resources
-    else
-      args << "--python3"
-    end
+    args << "--python3"
 
     if build.with? "java-bindings"
       args << "--language-bindings=java"
@@ -62,16 +59,9 @@ class Cvc4 < Formula
       args << "--readline"
     end
 
-    if build.head?
-      run_in_venv(venv_root, ["./configure.sh", *args])
-      chdir "build" do
-        run_in_venv(venv_root, ["make", "install"])
-      end
-    else
-      system "./configure.sh", *args
-      chdir "build" do
-        system "make", "install"
-      end
+    run_in_venv(libexec, ["./configure.sh", *args])
+    chdir "build" do
+      run_in_venv(libexec, ["make", "install"])
     end
   end
 
