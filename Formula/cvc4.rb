@@ -3,8 +3,8 @@ class Cvc4 < Formula
 
   desc "Open-source automatic theorem prover for SMT"
   homepage "https://cvc4.cs.stanford.edu/"
-  url "https://github.com/CVC4/CVC4/archive/1.7.tar.gz"
-  sha256 "9864a364a0076ef7ff63a46cdbc69cbe6568604149626338598d4df7788f8c2e"
+  url "https://github.com/CVC4/CVC4/archive/1.8.tar.gz"
+  sha256 "27de80c14e1c5f9e2aa4ea75566fd0b7ff2093247516d725fa22c599a6b9bf37"
   head "https://github.com/CVC4/CVC4.git"
 
   option "with-java-bindings", "Compile with Java bindings"
@@ -23,8 +23,8 @@ class Cvc4 < Formula
   depends_on :arch => :x86_64
 
   resource "toml" do
-    url "https://files.pythonhosted.org/packages/b9/19/5cbd78eac8b1783671c40e34bb0fa83133a06d340a38b55c645076d40094/toml-0.10.0.tar.gz"
-    sha256 "229f81c57791a41d65e399fc06bf0848bab550a9dfd5ed66df18ce5f05e73d5c"
+    url "https://files.pythonhosted.org/packages/da/24/84d5c108e818ca294efe7c1ce237b42118643ce58a14d2462b3b2e3800d5/toml-0.10.1.tar.gz"
+    sha256 "926b612be1e5ce0634a2ca03470f95169cf16f939018233a670519cb4ac58b0f"
   end
 
   def run_in_venv(venv, cmd)
