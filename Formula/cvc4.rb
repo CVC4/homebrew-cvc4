@@ -36,6 +36,7 @@ class Cvc4 < Formula
   def install
     venv = virtualenv_create(libexec, "python3")
     venv.pip_install resources
+    venv.pip_install_and_link resources
 
     system "contrib/get-antlr-3.4"
     system "contrib/get-symfpu"
