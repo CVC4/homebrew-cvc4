@@ -14,6 +14,8 @@ class Cvc4 < Formula
   depends_on "cmake" => :build
   depends_on "python" => :build
   depends_on "gmp"
+  depends_on "antlr@3"
+  depends_on "libantlr3c"
   depends_on "readline" => :optional
   depends_on :java if build.with? "java-bindings"
   depends_on "swig"
@@ -34,7 +36,6 @@ class Cvc4 < Formula
   end
 
   def install
-    system "contrib/get-antlr-3.4"
     system "contrib/get-symfpu"
 
     args = ["--prefix=#{prefix}",
