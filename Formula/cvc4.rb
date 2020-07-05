@@ -32,14 +32,13 @@ class Cvc4 < Formula
 
     args = ["--prefix=#{prefix}",
             "--symfpu",
-            "--cryptominisat"]
+            "--cryptominisat",
+            "--python3"]
 
     venv_root = "#{buildpath}/venv"
     if build.head?
       system "#{HOMEBREW_PREFIX}/bin/python3", "-m", "venv", venv_root
       system "#{venv_root}/bin/pip", "install", "toml==0.10.0"
-    else
-      args << "--python3"
     end
 
     if build.with? "java-bindings"
