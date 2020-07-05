@@ -32,8 +32,7 @@ class Cvc4 < Formula
 
     args = ["--prefix=#{prefix}",
             "--symfpu",
-            "--cryptominisat",
-            "--python3"]
+            "--cryptominisat"]
 
     venv_root = "#{buildpath}/venv"
     if build.head?
@@ -55,6 +54,7 @@ class Cvc4 < Formula
     end
 
     if build.head?
+      run_in_venv(venv_root, ["which", "python"])
       run_in_venv(venv_root, ["./configure.sh", *args])
       chdir "build" do
         run_in_venv(venv_root, ["make", "install"])
