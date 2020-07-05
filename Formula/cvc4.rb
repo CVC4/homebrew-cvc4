@@ -1,6 +1,4 @@
 class Cvc4 < Formula
-  include Language::Python::Virtualenv
-
   desc "Open-source automatic theorem prover for SMT"
   homepage "https://cvc4.cs.stanford.edu/"
   url "https://github.com/CVC4/CVC4/archive/1.7.tar.gz"
@@ -38,8 +36,8 @@ class Cvc4 < Formula
 
     venv_root = "#{buildpath}/venv"
     if build.head?
-      system "python", "-m", "venv", venv_root
-      system @venv_root/"bin/pip", "install", "toml==0.10.0"
+      system "#{HOMEBREW_PREFIX}/bin/python3", "-m", "venv", venv_root
+      system "#{venv_root}/bin/pip", "install", "toml==0.10.0"
     else
       args << "--python3"
     end
