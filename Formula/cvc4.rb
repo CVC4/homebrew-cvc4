@@ -22,11 +22,6 @@ class Cvc4 < Formula
   depends_on "cryptominisat" => :build
   depends_on :arch => :x86_64
 
-  resource "toml" do
-    url "https://files.pythonhosted.org/packages/b9/19/5cbd78eac8b1783671c40e34bb0fa83133a06d340a38b55c645076d40094/toml-0.10.0.tar.gz"
-    sha256 "229f81c57791a41d65e399fc06bf0848bab550a9dfd5ed66df18ce5f05e73d5c"
-  end
-
   def run_in_venv(venv, cmd)
     activate = Shellwords.join(["source", "#{venv}/bin/activate"])
     cmd_str = Shellwords.join(cmd)
@@ -43,8 +38,8 @@ class Cvc4 < Formula
 
     venv_root = "#{buildpath}/venv"
     if build.head?
-      venv = virtualenv_create(venv_root, "python3")
-      venv.pip_install resources
+      system "#{bin}", "-m", "venv", venv_root
+      system @venv_root/"bin/pip", "install", "toml==0.10.0"
     else
       args << "--python3"
     end
