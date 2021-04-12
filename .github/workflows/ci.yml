@@ -12,9 +12,9 @@ jobs:
         # Make sure that we do not require wget to be installed
         brew remove wget
         mkdir -p "$(brew --repo)/Library/Taps/cvc4"
-        ln -s "${GITHUB_WORKSPACE}" "$(brew --repo)/Library/Taps/cvc4/homebrew-cvc4"
+        ln -s "${{ github.workspace }}" "$(brew --repo)/Library/Taps/cvc4/homebrew-cvc4"
     - name: Audit
-      run: brew audit cvc4/cvc4/cvc4
+      run: brew audit --formula "${{ github.workspace }}/Formula/cvc4.rb"
     - name: Install
       run: brew install cvc4/cvc4/cvc4 --verbose
     - name: Test
