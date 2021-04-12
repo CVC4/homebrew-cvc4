@@ -7,7 +7,7 @@ jobs:
     steps:
     - name: Setup
       run: |
-        brew udpate
+        brew update 
         # Make sure that we do not require wget to be installed
         brew remove wget
         mkdir -p $(brew --repo)/Library/Taps/cvc4
