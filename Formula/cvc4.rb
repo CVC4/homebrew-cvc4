@@ -10,11 +10,11 @@ class Cvc4 < Formula
   option "with-java-bindings", "Compile with Java bindings"
   option "with-gpl", "Allow building against GPL'ed libraries"
 
-  depends_on arch: :x86_64
   depends_on "cmake" => :build
   depends_on "coreutils" => :build
   depends_on "cryptominisat" => :build
   depends_on "python" => :build
+  depends_on arch: :x86_64
   depends_on "gmp"
   depends_on :java if build.with? "java-bindings"
   depends_on "swig"
@@ -79,7 +79,7 @@ class Cvc4 < Formula
       QUERY x2;
     EOS
     result = shell_output "#{bin}/cvc4 #{testpath/"simple.cvc"}"
-    assert_match (/valid/), result
+    assert_match(/valid/, result)
     (testpath/"simple.smt").write <<~EOS
       (set-option :produce-models true)
       (set-logic QF_BV)
@@ -89,7 +89,7 @@ class Cvc4 < Formula
       (check-sat)
     EOS
     result = shell_output "#{bin}/cvc4 --lang smt #{testpath/"simple.smt"}"
-    assert_match (/unsat/), result
+    assert_match(/unsat/, result)
   end
 
   private
