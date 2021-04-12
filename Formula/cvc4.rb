@@ -10,17 +10,15 @@ class Cvc4 < Formula
   option "with-java-bindings", "Compile with Java bindings"
   option "with-gpl", "Allow building against GPL'ed libraries"
 
-  depends_on "coreutils" => :build
   depends_on "cmake" => :build
+  depends_on "coreutils" => :build
+  depends_on "cryptominisat" => :build
   depends_on "python" => :build
+  depends_on arch: :x86_64
   depends_on "gmp"
-  depends_on "readline" => :optional
   depends_on :java if build.with? "java-bindings"
   depends_on "swig"
-  depends_on "automake" => :build if not build.head?
-  depends_on "libtool" => :build if not build.head?
-  depends_on "cryptominisat" => :build
-  depends_on :arch => :x86_64
+  depends_on "readline" => :optional
 
   resource "toml" do
     url "https://files.pythonhosted.org/packages/b9/19/5cbd78eac8b1783671c40e34bb0fa83133a06d340a38b55c645076d40094/toml-0.10.0.tar.gz"
@@ -49,13 +47,8 @@ class Cvc4 < Formula
       args << "--python3"
     end
 
-    if build.with? "java-bindings"
-      args << "--language-bindings=java"
-    end
-
-    if allow_gpl?
-      args << "--gpl"
-    end
+    args << "--language-bindings=java" if build.with? "java-bindings"
+    args << "--gpl" if allow_gpl?
 
     if build.with? "readline"
       gpl_dependency "readline"
@@ -85,8 +78,8 @@ class Cvc4 < Formula
       % EXPECT: valid
       QUERY x2;
     EOS
-    result = shell_output "#{bin}/cvc4 #{(testpath/"simple.cvc")}"
-    assert_match /valid/, result
+    result = shell_output "#{bin}/cvc4 #{testpath/"simple.cvc"}"
+    assert_match(/valid/, result)
     (testpath/"simple.smt").write <<~EOS
       (set-option :produce-models true)
       (set-logic QF_BV)
@@ -95,8 +88,8 @@ class Cvc4 < Formula
       (assert (not s_1))
       (check-sat)
     EOS
-    result = shell_output "#{bin}/cvc4 --lang smt #{(testpath/"simple.smt")}"
-    assert_match /unsat/, result
+    result = shell_output "#{bin}/cvc4 --lang smt #{testpath/"simple.smt"}"
+    assert_match(/unsat/, result)
   end
 
   private
