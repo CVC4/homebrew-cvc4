@@ -15,7 +15,7 @@ jobs:
         echo $(brew --repo)
         ls -al $(brew --repo)/Library/Taps
         ls -al $(brew --repo)/Library/Taps/cvc4
-        ls -al $(brew --repo)/Library/Taps/cvc4/homebrew-cvc4
+        ls -al $(brew --repo)/Library/Taps/cvc4/homebrew-cvc4/
         # - name: Audit
         #   run: brew audit cvc4/cvc4/cvc4
     - name: Install
