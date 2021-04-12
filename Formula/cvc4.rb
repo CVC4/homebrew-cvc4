@@ -47,7 +47,6 @@ class Cvc4 < Formula
       args << "--python3"
     end
 
-    
     args << "--language-bindings=java" if build.with? "java-bindings"
     args << "--gpl" if allow_gpl?
 
