@@ -5,19 +5,16 @@ jobs:
   build:
     runs-on: macos-latest
     steps:
+    - uses: actions/checkout@v2
     - name: Setup
       run: |
         brew update 
         # Make sure that we do not require wget to be installed
         brew remove wget
-        mkdir -p $(brew --repo)/Library/Taps/cvc4
-        ln -s $PWD $(brew --repo)/Library/Taps/cvc4/homebrew-cvc4
-        echo $(brew --repo)
-        ls -al $(brew --repo)/Library/Taps
-        ls -al $(brew --repo)/Library/Taps/cvc4
-        ls -al $(brew --repo)/Library/Taps/cvc4/homebrew-cvc4/
-        # - name: Audit
-        #   run: brew audit cvc4/cvc4/cvc4
+        mkdir -p "$(brew --repo)/Library/Taps/cvc4"
+        ln -s "${GITHUB_WORKSPACE}" "$(brew --repo)/Library/Taps/cvc4/homebrew-cvc4"
+    - name: Audit
+      run: brew audit cvc4/cvc4/cvc4
     - name: Install
       run: brew install cvc4/cvc4/cvc4 --verbose
     - name: Test
