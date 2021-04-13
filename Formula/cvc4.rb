@@ -14,7 +14,7 @@ class Cvc4 < Formula
   depends_on "coreutils" => :build
   depends_on "cryptominisat" => :build
   depends_on "python" => :build
-  depends_on arch: :x86_64
+  depends_on arch: :x86_64 unless build.head?
   depends_on "gmp"
   depends_on :java if build.with? "java-bindings"
   depends_on "swig"
