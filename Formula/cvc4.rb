@@ -25,10 +25,9 @@ class Cvc4 < Formula
     sha256 "229f81c57791a41d65e399fc06bf0848bab550a9dfd5ed66df18ce5f05e73d5c"
   end
 
-  def run_in_venv(venv, cmd)
-    activate = Shellwords.join(["source", "#{venv}/bin/activate"])
+  def run_with_prefix_path(prefix_path, cmd)
     cmd_str = Shellwords.join(cmd)
-    system "bash", "-c", (activate + " && " + cmd_str)
+    system "bash", "-c", "export \"CMAKE_PREFIX_PATH=#{prefix_path}:\$CMAKE_PREFIX_PATH\"; #{cmd_str}"
   end
 
   def install
@@ -37,7 +36,8 @@ class Cvc4 < Formula
 
     args = ["--prefix=#{prefix}",
             "--symfpu",
-            "--cryptominisat"]
+            "--cryptominisat",
+            "--python3"]
 
     venv_root = "#{buildpath}/venv"
     venv = virtualenv_create(venv_root, "python3")
@@ -51,9 +51,9 @@ class Cvc4 < Formula
       args << "--readline"
     end
 
-    run_in_venv(venv_root, ["./configure.sh", *args])
+    run_with_prefix_path("#{venv_root}/bin", ["./configure.sh", *args])
     chdir "build" do
-      run_in_venv(venv_root, ["make", "install"])
+      system "make", "install"
     end
   end
 
