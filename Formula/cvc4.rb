@@ -31,18 +31,19 @@ class Cvc4 < Formula
   end
 
   def install
-    system "contrib/get-antlr-3.4"
-    system "contrib/get-symfpu"
-
-    args = ["--prefix=#{prefix}",
-            "--symfpu",
-            "--cryptominisat",
-            "--python3"]
+    system "contrib/get-antlr-3.4" unless build.head?
+    system "contrib/get-symfpu" unless build.head?
 
     venv_root = "#{buildpath}/venv"
     venv = virtualenv_create(venv_root, "python3")
     venv.pip_install resources
 
+    args = ["--prefix=#{prefix}",
+            "--symfpu",
+            "--cryptominisat",
+            ]
+
+    args << "--python3" unless build.head?
     args << "--language-bindings=java" if build.with? "java-bindings"
     args << "--gpl" if allow_gpl?
 
@@ -64,11 +65,11 @@ class Cvc4 < Formula
       ASSERT x0 OR NOT x3;
       ASSERT x3 OR x2;
       ASSERT x1 AND NOT x1;
-      % EXPECT: valid
+      % EXPECT: entailed
       QUERY x2;
     EOS
     result = shell_output "#{bin}/cvc4 #{testpath/"simple.cvc"}"
-    assert_match(/valid/, result)
+    assert_match(/entailed/, result)
     (testpath/"simple.smt").write <<~EOS
       (set-option :produce-models true)
       (set-logic QF_BV)
