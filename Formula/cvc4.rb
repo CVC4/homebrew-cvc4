@@ -3,8 +3,8 @@ class Cvc4 < Formula
 
   desc "Open-source automatic theorem prover for SMT"
   homepage "https://cvc4.cs.stanford.edu/"
-  url "https://github.com/CVC4/CVC4/archive/1.7.tar.gz"
-  sha256 "9864a364a0076ef7ff63a46cdbc69cbe6568604149626338598d4df7788f8c2e"
+  url "https://github.com/CVC4/CVC4/archive/1.8.tar.gz"
+  sha256 "27de80c14e1c5f9e2aa4ea75566fd0b7ff2093247516d725fa22c599a6b9bf37"
   head "https://github.com/CVC4/CVC4.git"
 
   option "with-java-bindings", "Compile with Java bindings"
@@ -25,28 +25,24 @@ class Cvc4 < Formula
     sha256 "229f81c57791a41d65e399fc06bf0848bab550a9dfd5ed66df18ce5f05e73d5c"
   end
 
-  def run_in_venv(venv, cmd)
-    activate = Shellwords.join(["source", "#{venv}/bin/activate"])
+  def run_with_prefix_path(prefix_path, cmd)
     cmd_str = Shellwords.join(cmd)
-    system "bash", "-c", (activate + " && " + cmd_str)
+    system "bash", "-c", "export \"CMAKE_PREFIX_PATH=#{prefix_path}:\$CMAKE_PREFIX_PATH\"; #{cmd_str}"
   end
 
   def install
-    system "contrib/get-antlr-3.4"
-    system "contrib/get-symfpu"
+    system "contrib/get-antlr-3.4" unless build.head?
+    system "contrib/get-symfpu" unless build.head?
+
+    venv_root = "#{buildpath}/venv"
+    venv = virtualenv_create(venv_root, "python3")
+    venv.pip_install resources
 
     args = ["--prefix=#{prefix}",
             "--symfpu",
             "--cryptominisat"]
 
-    venv_root = "#{buildpath}/venv"
-    if build.head?
-      venv = virtualenv_create(venv_root, "python3")
-      venv.pip_install resources
-    else
-      args << "--python3"
-    end
-
+    args << "--python3" unless build.head?
     args << "--language-bindings=java" if build.with? "java-bindings"
     args << "--gpl" if allow_gpl?
 
@@ -55,16 +51,9 @@ class Cvc4 < Formula
       args << "--readline"
     end
 
-    if build.head?
-      run_in_venv(venv_root, ["./configure.sh", *args])
-      chdir "build" do
-        run_in_venv(venv_root, ["make", "install"])
-      end
-    else
-      system "./configure.sh", *args
-      chdir "build" do
-        system "make", "install"
-      end
+    run_with_prefix_path("#{venv_root}/bin", ["./configure.sh", *args])
+    chdir "build" do
+      system "make", "install"
     end
   end
 
@@ -75,11 +64,11 @@ class Cvc4 < Formula
       ASSERT x0 OR NOT x3;
       ASSERT x3 OR x2;
       ASSERT x1 AND NOT x1;
-      % EXPECT: valid
+      % EXPECT: entailed
       QUERY x2;
     EOS
     result = shell_output "#{bin}/cvc4 #{testpath/"simple.cvc"}"
-    assert_match(/valid/, result)
+    assert_match(/entailed/, result)
     (testpath/"simple.smt").write <<~EOS
       (set-option :produce-models true)
       (set-logic QF_BV)
