@@ -45,6 +45,7 @@ class Cvc4 < Formula
 
     args << "--python3" unless build.head?
     args << "--language-bindings=java" if build.with? "java-bindings"
+    args << "--no-poly" if build.head?
     args << "--gpl" if allow_gpl?
 
     if build.with? "readline"
