@@ -42,6 +42,8 @@ class Cvc4 < Formula
             "--symfpu",
             "--cryptominisat"]
 
+    # TODO: Replace with separate formulas
+    args << "--auto-download" if build.head?
     args << "--python3" unless build.head?
     args << "--language-bindings=java" if build.with? "java-bindings"
     args << "--gpl" if allow_gpl?
