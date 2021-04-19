@@ -39,14 +39,15 @@ class Cvc4 < Formula
     venv.pip_install resources
 
     args = ["--prefix=#{prefix}",
-            "--symfpu",
             "--cryptominisat",
             "--no-cadical"]
 
-    args << "--python3" unless build.head?
+    args << "--gpl" if allow_gpl?
     args << "--language-bindings=java" if build.with? "java-bindings"
     args << "--no-poly" if build.head?
-    args << "--gpl" if allow_gpl?
+    args << "--no-symfpu" if build.head?
+    args << "--python3" unless build.head?
+    args << "--symfpu" unless build.head?
 
     if build.with? "readline"
       gpl_dependency "readline"
