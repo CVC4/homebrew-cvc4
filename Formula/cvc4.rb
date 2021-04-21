@@ -62,7 +62,7 @@ class Cvc4 < Formula
   end
 
   test do
-    binary = "#{bin}/#{build.head? "cvc5" : "cvc4"}"
+    binary = "#{bin}/#{build.head? ? "cvc5" : "cvc4"}"
     (testpath/"simple.cvc").write <<~EOS
       x0, x1, x2, x3 : BOOLEAN;
       ASSERT x1 OR NOT x0;
