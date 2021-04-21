@@ -57,6 +57,8 @@ class Cvc4 < Formula
     chdir "build" do
       system "make", "install"
     end
+
+    bin.install_symlink "cvc5" => "cvc4" if build.head?
   end
 
   test do
