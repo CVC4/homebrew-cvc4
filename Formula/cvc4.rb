@@ -58,7 +58,7 @@ class Cvc4 < Formula
       system "make", "install"
     end
 
-    bin.install_symlink "#{bin}/cvc4" => "#{bin}/cvc5" if build.head?
+    bin.install_symlink "cvc4" => "cvc5" if build.head?
   end
 
   test do
