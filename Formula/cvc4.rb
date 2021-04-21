@@ -58,11 +58,10 @@ class Cvc4 < Formula
       system "make", "install"
     end
 
-    bin.install_symlink "#{bin}/cvc5" => "#{bin}/cvc4" if build.head?
+    bin.install_symlink "#{bin}/cvc4" => "#{bin}/cvc5" if build.head?
   end
 
   test do
-    binary = "#{bin}/#{build.head? ? "cvc5" : "cvc4"}"
     (testpath/"simple.cvc").write <<~EOS
       x0, x1, x2, x3 : BOOLEAN;
       ASSERT x1 OR NOT x0;
@@ -72,7 +71,7 @@ class Cvc4 < Formula
       % EXPECT: entailed
       QUERY x2;
     EOS
-    result = shell_output "#{binary} #{testpath/"simple.cvc"}"
+    result = shell_output "#{bin}/cvc4 #{testpath/"simple.cvc"}"
     assert_match(/entailed/, result)
     (testpath/"simple.smt").write <<~EOS
       (set-option :produce-models true)
@@ -82,7 +81,7 @@ class Cvc4 < Formula
       (assert (not s_1))
       (check-sat)
     EOS
-    result = shell_output "#{binary} --lang smt #{testpath/"simple.smt"}"
+    result = shell_output "#{bin}/cvc4 --lang smt #{testpath/"simple.smt"}"
     assert_match(/unsat/, result)
   end
 
