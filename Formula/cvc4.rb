@@ -7,6 +7,12 @@ class Cvc4 < Formula
   sha256 "80fd10d5e4cca56367fc5398ba0117a86d891e0b9b247a97cd981fe02e8167f5"
   head "https://github.com/CVC4/CVC4.git"
 
+  bottle do
+    root_url "https://github.com/CVC4/homebrew-cvc4/releases/download/cvc4-1.8"
+    rebuild 1
+    sha256 catalina: "0537e120d4d333ea45579eccd06216a1c7478b1f806e4698ccbd66fc6e30a136"
+  end
+
   option "with-java-bindings", "Compile with Java bindings"
   option "with-gpl", "Allow building against GPL'ed libraries"
 
