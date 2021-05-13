@@ -15,6 +15,7 @@ class Cvc4 < Formula
   depends_on "cryptominisat" => :build
   depends_on "python" => :build
   depends_on arch: :x86_64 unless build.head?
+  depends_on "cadical"
   depends_on "gmp"
   depends_on :java if build.with? "java-bindings"
   depends_on "swig"
@@ -40,7 +41,8 @@ class Cvc4 < Formula
 
     args = ["--prefix=#{prefix}",
             "--symfpu",
-            "--cryptominisat"]
+            "--cryptominisat",
+            "--cadical"]
 
     # TODO: Replace with separate formulas
     args << "--auto-download" if build.head?
