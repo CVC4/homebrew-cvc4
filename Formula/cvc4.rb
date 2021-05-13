@@ -79,7 +79,7 @@ class Cvc4 < Formula
     EOS
     result = shell_output "#{bin}/cvc4 #{testpath/"simple.cvc"}"
     assert_match(/entailed/, result)
-    (testpath/"simple.smt").write <<~EOS
+    (testpath/"simple.smt2").write <<~EOS
       (set-option :produce-models true)
       (set-logic QF_BV)
       (define-fun s_2 () Bool false)
@@ -87,7 +87,7 @@ class Cvc4 < Formula
       (assert (not s_1))
       (check-sat)
     EOS
-    result = shell_output "#{bin}/cvc4 --lang smt #{testpath/"simple.smt"}"
+    result = shell_output "#{bin}/cvc4 --lang smt2 #{testpath/"simple.smt2"}"
     assert_match(/unsat/, result)
   end
 
