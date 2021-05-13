@@ -5,6 +5,7 @@ class Cvc4 < Formula
   homepage "https://cvc4.cs.stanford.edu/"
   url "https://github.com/CVC4/CVC4-archived/archive/refs/tags/1.8.tar.gz"
   sha256 "80fd10d5e4cca56367fc5398ba0117a86d891e0b9b247a97cd981fe02e8167f5"
+  license "BSD-3-Clause"
   head "https://github.com/CVC4/CVC4.git"
 
   option "with-java-bindings", "Compile with Java bindings"
