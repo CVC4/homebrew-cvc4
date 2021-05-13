@@ -3,77 +3,65 @@ class Cvc4 < Formula
 
   desc "Open-source automatic theorem prover for SMT"
   homepage "https://cvc4.cs.stanford.edu/"
-  url "https://github.com/CVC4/CVC4/archive/1.7.tar.gz"
-  sha256 "9864a364a0076ef7ff63a46cdbc69cbe6568604149626338598d4df7788f8c2e"
+  url "https://github.com/CVC4/CVC4-archived/archive/refs/tags/1.8.tar.gz"
+  sha256 "80fd10d5e4cca56367fc5398ba0117a86d891e0b9b247a97cd981fe02e8167f5"
   head "https://github.com/CVC4/CVC4.git"
 
   option "with-java-bindings", "Compile with Java bindings"
   option "with-gpl", "Allow building against GPL'ed libraries"
 
-  depends_on "coreutils" => :build
   depends_on "cmake" => :build
+  depends_on "coreutils" => :build
+  depends_on "cryptominisat" => :build
   depends_on "python" => :build
+  depends_on arch: :x86_64 unless build.head?
+  depends_on "antlr@3"  
+  depends_on "cadical"
   depends_on "gmp"
-  depends_on "antlr@3"
   depends_on "libantlr3c"
-  depends_on "readline" => :optional
   depends_on :java if build.with? "java-bindings"
   depends_on "swig"
-  depends_on "automake" => :build if not build.head?
-  depends_on "libtool" => :build if not build.head?
-  depends_on "cryptominisat" => :build
-  depends_on :arch => :x86_64
+  depends_on "readline" => :optional
 
   resource "toml" do
     url "https://files.pythonhosted.org/packages/b9/19/5cbd78eac8b1783671c40e34bb0fa83133a06d340a38b55c645076d40094/toml-0.10.0.tar.gz"
     sha256 "229f81c57791a41d65e399fc06bf0848bab550a9dfd5ed66df18ce5f05e73d5c"
   end
 
-  def run_in_venv(venv, cmd)
-    activate = Shellwords.join(["source", "#{venv}/bin/activate"])
+  def run_with_prefix_path(prefix_path, cmd)
     cmd_str = Shellwords.join(cmd)
-    system "bash", "-c", (activate + " && " + cmd_str)
+    system "bash", "-c", "export \"CMAKE_PREFIX_PATH=#{prefix_path}:\$CMAKE_PREFIX_PATH\"; #{cmd_str}"
   end
 
   def install
-    system "contrib/get-symfpu"
+    system "contrib/get-symfpu" unless build.head?
+
+    venv_root = "#{buildpath}/venv"
+    venv = virtualenv_create(venv_root, "python3")
+    venv.pip_install resources
 
     args = ["--prefix=#{prefix}",
             "--symfpu",
-            "--cryptominisat"]
+            "--cryptominisat",
+            "--cadical"]
 
-    venv_root = "#{buildpath}/venv"
-    if build.head?
-      venv = virtualenv_create(venv_root, "python3")
-      venv.pip_install resources
-    else
-      args << "--python3"
-    end
-
-    if build.with? "java-bindings"
-      args << "--language-bindings=java"
-    end
-
-    if allow_gpl?
-      args << "--gpl"
-    end
+    # TODO: Replace with separate formulas
+    args << "--auto-download" if build.head?
+    args << "--python3" unless build.head?
+    args << "--language-bindings=java" if build.with? "java-bindings"
+    args << "--gpl" if allow_gpl?
 
     if build.with? "readline"
       gpl_dependency "readline"
       args << "--readline"
     end
 
-    if build.head?
-      run_in_venv(venv_root, ["./configure.sh", *args])
-      chdir "build" do
-        run_in_venv(venv_root, ["make", "install"])
-      end
-    else
-      system "./configure.sh", *args
-      chdir "build" do
-        system "make", "install"
-      end
+    run_with_prefix_path("#{venv_root}/bin", ["./configure.sh", *args])
+    chdir "build" do
+      system "make", "install"
     end
+
+    bin.install_symlink "cvc5" => "cvc4" if build.head?
   end
 
   test do
@@ -83,11 +71,11 @@ class Cvc4 < Formula
       ASSERT x0 OR NOT x3;
       ASSERT x3 OR x2;
       ASSERT x1 AND NOT x1;
-      % EXPECT: valid
+      % EXPECT: entailed
       QUERY x2;
     EOS
-    result = shell_output "#{bin}/cvc4 #{(testpath/"simple.cvc")}"
-    assert_match /valid/, result
+    result = shell_output "#{bin}/cvc4 #{testpath/"simple.cvc"}"
+    assert_match(/entailed/, result)
     (testpath/"simple.smt").write <<~EOS
       (set-option :produce-models true)
       (set-logic QF_BV)
@@ -96,8 +84,8 @@ class Cvc4 < Formula
       (assert (not s_1))
       (check-sat)
     EOS
-    result = shell_output "#{bin}/cvc4 --lang smt #{(testpath/"simple.smt")}"
-    assert_match /unsat/, result
+    result = shell_output "#{bin}/cvc4 --lang smt #{testpath/"simple.smt"}"
+    assert_match(/unsat/, result)
   end
 
   private
