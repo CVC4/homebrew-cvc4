@@ -15,8 +15,10 @@ class Cvc4 < Formula
   depends_on "cryptominisat" => :build
   depends_on "python" => :build
   depends_on arch: :x86_64 unless build.head?
+  depends_on "antlr@3"  
   depends_on "cadical"
   depends_on "gmp"
+  depends_on "libantlr3c"
   depends_on :java if build.with? "java-bindings"
   depends_on "swig"
   depends_on "readline" => :optional
@@ -32,7 +34,6 @@ class Cvc4 < Formula
   end
 
   def install
-    system "contrib/get-antlr-3.4" unless build.head?
     system "contrib/get-symfpu" unless build.head?
 
     venv_root = "#{buildpath}/venv"
