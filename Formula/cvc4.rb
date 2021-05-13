@@ -12,7 +12,6 @@ class Cvc4 < Formula
 
   depends_on "cmake" => :build
   depends_on "coreutils" => :build
-  depends_on "cryptominisat" => :build
   depends_on "python" => :build
   depends_on arch: :x86_64 unless build.head?
   depends_on "cadical"
@@ -41,7 +40,6 @@ class Cvc4 < Formula
 
     args = ["--prefix=#{prefix}",
             "--symfpu",
-            "--cryptominisat",
             "--cadical"]
 
     # TODO: Replace with separate formulas
